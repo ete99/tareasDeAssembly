@@ -1,0 +1,11 @@
+.text
+	li $s1, 20
+	li $s6, 256
+	addi $s6, $s6, -20
+	add $s6, $s6,$s1
+	lw $s0, 8($s6)
+	add $a0, $s0, $0
+	li $v0, 1
+	syscall 
+	li $v0, 10
+	syscall

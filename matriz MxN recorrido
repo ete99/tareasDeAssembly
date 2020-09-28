@@ -1,0 +1,77 @@
+.data
+array: .space 400
+filas: .space 8
+
+prompti: .asciiz "Insertar i:\n"
+promptj: .asciiz "Insertar j:\n"
+prompt2: .asciiz "The Fibonacci value is:\n"
+columnas: .word
+
+.text
+la $a3, array
+la $s0, filas
+la $s1, columnas
+
+# Print prompt1
+li $v0, 4
+la $a0, prompti
+syscall
+
+# Read string
+li $v0, 5
+syscall
+sw $v0, ($s0) # $s0=filas# $s1=columnas
+
+# Print promptj
+li $v0, 4
+la $a0, promptj
+syscall
+
+# Read string
+li $v0, 5
+syscall
+sw $v0, 4($s0) # $a1=columnas
+# Call fibonacci
+#move $a0, $v0
+jal cuentaMat
+#move $a1, $v0 # save return value to a1
+
+# Print prompt2
+li $v0, 4
+la $a0, prompt2
+syscall
+
+# Print result
+li $v0, 1
+move $a0, $a1
+syscall
+
+# Exit
+li $v0, 10
+syscall
+
+cuentaMat:
+	 li $t1, 0#i
+	 li $t2, 0#j
+	 li $t0, 1#1
+	 li $t3, 0  
+	 lw $t4, 0($s0)# $s0=filas
+	 lw $t5, 4($s0)# $s1=columnas
+	 while1: beq $t1, $t4, finWhile1
+	 	while2: beq $t2, $t5, finWhile2
+	 	 	mult $t2, $t5
+	 	 	mflo $t3
+	 	 	add $t3, $t3, $t1
+	 	 	sll $t3, $t3, 2 #porque es un int
+	 	 	add $t3, $t3, $a3 #a3 array
+	 	 	sw $t0, ($t3) #pone en 1 los
+	 	 	
+	 		addi $t2,$t2,1
+ 	 		j while2
+ 	 	finWhile2:
+ 	 	li $t2, 0#j=0
+	 	addi $t1,$t1,1
+	 	j while1
+	 finWhile1:
+	 jr $ra
+	##falta retornar prro
